@@ -1,5 +1,5 @@
 # Playlify
-An AI-powered multimodal mood-based playlist generator that allows users to input text, images, or voice. It analyzes the user’s mood/vibe using a custom RAG + LLM (or Gemini API) pipeline, combines it with the user’s Spotify listening history, and automatically creates a personalized Spotify playlist that matches both their current mood and music taste, leveraging robust backend services like Redis caching, rate limiting, intent classification, and observability for reliability and performance.
+An AI-powered multimodal mood-based playlist generator that allows users to input text, images, or voice. It analyzes the user’s mood/vibe using a custom RAG + LLM pipeline, combines it with the user’s Spotify listening history, and automatically creates a personalized Spotify playlist that matches both their current mood and music taste, leveraging robust backend services like Redis caching, rate limiting, intent classification, and observability for reliability and performance.
 
 ## Key Features
 * <b>Multimodal Input</b> — Understands text, voice, and images
