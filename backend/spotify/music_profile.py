@@ -61,9 +61,8 @@ def add_music_taste():
             upsert = True
         )
 
-    print(top_artists)
-    print(genre_counter)
-    return jsonify(top_artists)
+    print("Music Taste Updated")
+    return redirect(url_for("profile.me"))
 
 @profile_bp.route('/me')
 @jwt_required()
@@ -74,11 +73,20 @@ def me():
             {"spotify_id":userid}
         )
         if user:  
-            print (jsonify({
-                "name":user["name"]
-            }))
+            if (user["top_artists"]):
+                user_profile = {
+                    "name":user["name"],
+                    "top_artists":user["top_artists"],
+                    "genres":user["genres"]
+                }
 
-            return redirect(url_for("profile.add_music_taste"))
+                return jsonify(user_profile)
+            else:
+                print("Creating Music Taste")
+                return redirect(url_for("profile.add_music_taste"))
+        else:
+            print("User Does not exist ")
+            return redirect("auth.login")
     else:
         return redirect("auth.login")
 
