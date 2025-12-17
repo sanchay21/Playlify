@@ -1,6 +1,6 @@
 import os
-from flask import redirect, request, Blueprint, jsonify, session, url_for
-from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+from flask import make_response, redirect, request, Blueprint, jsonify, session, url_for
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity, verify_jwt_in_request
 import datetime
 import requests
 from dotenv import load_dotenv
@@ -20,10 +20,20 @@ API_BASE_URL = 'https://api.spotify.com/v1/'
 
 auth_bp = Blueprint("auth", __name__)
 
-@auth_bp.route('/')
-def index():
-    return "Welcome to Playlify.<a href='/auth/login'> Login with Spotify></a>"
 
+@auth_bp.route("/")
+def entry():
+    try:
+        verify_jwt_in_request()
+        userid  = get_jwt_identity()
+        if userid:
+            return redirect(url_for('profile.me'))   # whatever YOU decide
+        else:
+            return "Welcome to Playlify.<a href='/auth/login'> Login with Spotify></a>"
+    except Exception as e: 
+        print("JWT FAIL:", e)
+        return redirect(url_for("auth.login"))
+    
 @auth_bp.route('/login')
 def login():
     scope = 'user-top-read playlist-modify-private'
@@ -64,12 +74,10 @@ def callback():
         session['refresh_token'] = token_info['refresh_token']
         session['expires_at'] = datetime.datetime.now().timestamp() + token_info['expires_in']
 
-        # return redirect(url_for('profile.taste'))
-        # return redirect(url_for('profile.profile_creation'))
-        return redirect(url_for('auth.profile_creation'))
+        return redirect(url_for('auth.create_user'))
 
-@auth_bp.route('/music-taste')
-def profile_creation():
+@auth_bp.route('/create-user')
+def create_user():
     if 'access_token' not in session:
         return redirect(url_for('auth.login'))
     if datetime.datetime.now().timestamp() > session['expires_at']:
@@ -96,7 +104,22 @@ def profile_creation():
         upsert = True
     )
 
-    return jsonify(user_info)
+    jwt_access_token = create_access_token(
+        identity=spotifyID,
+        expires_delta=datetime.timedelta(days=7)
+    )
+
+    response = make_response(redirect(url_for('profile.add_music_taste')))
+    response.set_cookie(
+        "access_token_cookie",
+        jwt_access_token,
+        httponly=True,
+        secure=False,       #must be False for local HTTP
+        samesite="Lax",     # lax works locally for top-level navigation
+        max_age=7 * 24 * 60 * 60
+    )
+
+    return response
 
 @auth_bp.route('/refresh-tokens')
 def refresh_token():
