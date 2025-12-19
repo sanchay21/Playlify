@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 # import blueprints
 from spotify.auth import auth_bp
 from spotify.music_profile import profile_bp
+from llm.routes import llm_bp
 
 load_dotenv()
 
@@ -15,12 +16,15 @@ app.config["JWT_SECRET_KEY"] = os.getenv("SECRET_KEY")  # REQUIRED
 app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
 app.config["JWT_COOKIE_NAME"] = "access_token_cookie"
 app.config["JWT_COOKIE_CSRF_PROTECT"] = False  # for now
+app.config["JWT_BLACKLIST_ENABLED"] = True
+app.config["JWT_BLACKLIST_TOKEN_CHECKS"] = ["access"]
 
 jwt = JWTManager(app)
 CORS(app)   
 
 app.register_blueprint(auth_bp, url_prefix="/auth")
 app.register_blueprint(profile_bp, url_prefix="/profile")
+app.register_blueprint(llm_bp, url_prefix="/chat")
 
 @app.route('/')
 def home():
