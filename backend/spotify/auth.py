@@ -27,7 +27,7 @@ def entry():
         verify_jwt_in_request()
         userid  = get_jwt_identity()
         if userid:
-            return redirect(url_for('profile.me'))   # whatever YOU decide
+            return redirect(url_for('profile.me'))  
         else:
             return "Welcome to Playlify.<a href='/auth/login'> Login with Spotify></a>"
     except Exception as e: 

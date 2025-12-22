@@ -21,3 +21,7 @@ class GroqLLM(BaseLLM):
         )
 
         return response.choices[0].message.content.strip()
+
+def getLLM():
+    # Getting Configured LLM
+    return GroqLLM()
