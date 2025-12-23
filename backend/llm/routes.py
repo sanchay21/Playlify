@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request
 from llm.groq_llm import GroqLLM, getLLM
+import json
 
 llm_bp = Blueprint("llm", __name__)
 
@@ -18,7 +19,8 @@ The user query may describe one or more of the following:
 
 Instructions:
 1. Generate a list of exactly 10 songs.
-2. **Return only the song titles** as a JSON array.
+2. **Return only the song titles** as a VALID JSON object in the following format ONLY:
+["Song 1", "Song 2", ..., "Song 10"]
 3. Do NOT include artist names, explanations, commentary, or markdown formatting.
 4. Output must be strictly like: ["Song 1", "Song 2", ..., "Song 10"]
 5. Focus on matching the user's preferred genres and mood from the query.
@@ -28,5 +30,8 @@ Return the JSON array only.
 
 
     response = llm.generate(prompt=user_prompt)
-    return response
-    
+    parsed = json.loads(response)
+
+    return {
+        "songs":parsed
+    }
