@@ -4,7 +4,7 @@ import EmptyState from "./EmptyState";
 import MessageList from "./MessageList";
 import InputBar from "./InputBar";
 
-import { sendTextMessage } from "./api";
+import { sendTextMessage } from "./api.ts";
 
 interface Message {
   id: string; 
