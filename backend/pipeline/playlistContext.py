@@ -7,6 +7,7 @@ class PlaylistContext:
     user_query: str
 
     intent: Optional[str] = None
+    response: Optional[str] = None
     is_safe: bool = True
     rag_context: Optional[str] = None
     user_preferences: Dict[str, Any] = field(default_factory=dict)

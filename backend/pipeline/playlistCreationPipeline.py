@@ -3,6 +3,7 @@ class PlaylistPipeline:
         self,
         rate_limiter,
         intent_classifier,
+        generic_responses,
         rag_retriever,
         user_music_prefernces,
         llm_client,
@@ -11,6 +12,7 @@ class PlaylistPipeline:
         ):
             self.rate_limiter = rate_limiter
             self.intent_classifier = intent_classifier
+            self.generic_responses = generic_responses
             self.rag_retriever = rag_retriever
             self.user_music_prefernces = user_music_prefernces
             self.llm_client = llm_client
@@ -24,7 +26,8 @@ class PlaylistPipeline:
         # To be Implemented
         ctx.intent = self.intent_classifier(ctx.user_query)
         if ctx.intent != "PLAYLIST_REQUEST":
-            return ctx.intent
+            ctx.response = self.generic_responses(ctx.intent)
+            return ctx
         
         # ctx.rag_context = self.rag_retriever.retrieve(ctx.user_query)
         # ctx.playlist_url = self.spotify_service.create_playlist(

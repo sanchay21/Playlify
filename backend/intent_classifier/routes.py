@@ -34,6 +34,4 @@ Return the JSON array only.
     response = llm.generate(prompt=user_prompt)
     parsed = json.loads(response)
 
-    return {
-        "intent": parsed["intent"]
-    }
+    return parsed["intent"]
