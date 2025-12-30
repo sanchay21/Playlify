@@ -14,7 +14,7 @@ load_dotenv()
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
 app.config["JWT_SECRET_KEY"] = os.getenv("SECRET_KEY")  # REQUIRED
-app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
+app.config["JWT_TOKEN_LOCATION"] = ["cookies", "headers"]
 app.config["JWT_COOKIE_CSRF_PROTECT"] = False  # for now
 app.config["JWT_BLACKLIST_ENABLED"] = False
 app.config["JWT_BLACKLIST_TOKEN_CHECKS"] = ["access"]

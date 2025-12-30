@@ -22,7 +22,10 @@ class PlaylistPipeline:
 
     def run(self, ctx):
         # To be Implemented
-        # ctx.intent = self.intent_classifier.classify(ctx.user_query)
+        ctx.intent = self.intent_classifier(ctx.user_query)
+        if ctx.intent != "PLAYLIST_REQUEST":
+            return ctx.intent
+        
         # ctx.rag_context = self.rag_retriever.retrieve(ctx.user_query)
         # ctx.playlist_url = self.spotify_service.create_playlist(
         #     user_id=ctx.user_id,

@@ -22,7 +22,7 @@ Rules:
 - Anything else → OTHER
 
 Respond ONLY in valid JSON like this:
-{"intent": "<INTENT_NAME>"}
+{{"intent": "<INTENT_NAME>"}}
 
 User message:
 "{query}"
