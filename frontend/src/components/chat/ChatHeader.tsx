@@ -1,7 +1,17 @@
 import { motion } from "framer-motion";
 import { Music2, Menu } from "lucide-react";
+import { LogOut } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/userAuth";
 
 const ChatHeader = () => {
+  const navigate = useNavigate();
+  const { logout } = useAuth();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/auth", { replace: true });
+  };
   return (
     <motion.header
       initial={{ opacity: 0, y: -10 }}
@@ -23,7 +33,14 @@ const ChatHeader = () => {
         <span className="font-semibold text-foreground">Playlify</span>
       </div>
 
-      <div className="w-10 h-10" /> {/* Spacer for centering */}
+      <button
+        onClick={handleLogout}
+        type="button"
+        className="w-10 h-10 rounded-xl hover:bg-destructive/10 flex items-center justify-center transition-colors"
+        aria-label="Logout"
+>
+        <LogOut className="w-5 h-5 text-destructive" />
+      </button>
     </motion.header>
   );
 };

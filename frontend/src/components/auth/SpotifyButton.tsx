@@ -47,7 +47,7 @@ const SpotifyButton = ({ onClick }: SpotifyButtonProps) => {
       ) : (
         <SpotifyIcon />
       )}
-      <span>{isLoading ? 'Connecting...' : 'Continue with Spotify'}</span>
+      <span>{isLoading ? 'Connecting...' : 'Login with Spotify'}</span>
     </motion.button>
   );
 };

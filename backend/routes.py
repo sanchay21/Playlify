@@ -12,6 +12,8 @@ test_bp = Blueprint("test", __name__)
 @chat_bp.route('/create', methods=["POST"])
 @jwt_required()
 def create():
+    print("RAW JSON:", request.json)
+    print("HEADERS:", request.headers)
     ctx = PlaylistContext(
         user_id=get_jwt_identity(),
         user_query=request.json.get("query"),

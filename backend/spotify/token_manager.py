@@ -15,11 +15,11 @@ def get_valid_spotify_token(spotify_id):
 
     spotify = user["spotify"]
 
-    # ✅ token still valid
+    # token still valid
     if time.time() < spotify["expires_at"]:
         return spotify["access_token"]
 
-    # 🔁 refresh token
+    # refresh token
     response = requests.post(
         TOKEN_URL,
         data={

@@ -18,6 +18,8 @@ def createPlaylist(user_id, songs, playName, spotify_token):
 
     response = requests.post(API_BASE_URL + f'users/{user_id}/playlists', headers = headers, json=data)
     #response.raise_for_status()
-    plalist = response.json()
-    return plalist
+    playlist = response.json()
+
+    
+    return playlist
     

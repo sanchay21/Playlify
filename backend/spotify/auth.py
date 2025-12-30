@@ -13,6 +13,7 @@ load_dotenv()
 SPOTIFY_CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
 SPOTIFY_CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
 REDIRECT_URI = os.getenv("REDIRECT_URI")
+FRONTEND_URL = os.getenv("FRONTEND_URL")
 
 AUTH_URL = 'https://accounts.spotify.com/authorize'
 TOKEN_URL = 'https://accounts.spotify.com/api/token'
@@ -111,7 +112,7 @@ def create_user():
         expires_delta=datetime.timedelta(days=7)
     )
 
-    response = make_response(redirect('/dashboard'))  # 👈 your app page
+    response = make_response(redirect(f'{FRONTEND_URL}'))  # 👈 your app page
     response.set_cookie(
         "access_token_cookie",
         jwt_token,
@@ -145,15 +146,21 @@ def refresh_token():
 
     return redirect('/dashboard')
 
-@auth_bp.route("/logout")
+@auth_bp.route("/logout", methods=["POST"])
 def logout():
-    response = make_response(redirect(url_for("auth.entry")))
-
-    # 🔐 Remove your app JWT
+    response = jsonify({"success": True})
     response.delete_cookie("access_token_cookie")
-
-    # 🧹 Clear Spotify session tokens (browser only)
     session.clear()
+    return response, 200
 
-    return response
-
+@auth_bp.route("/me", methods=["GET"])
+def me():
+    try:
+        verify_jwt_in_request()  # reads access_token_cookie automatically
+        userid = get_jwt_identity()
+        return jsonify({
+            "authenticated": True,
+            "user_id": userid
+        }), 200
+    except Exception:
+        return jsonify({"authenticated": False}), 401

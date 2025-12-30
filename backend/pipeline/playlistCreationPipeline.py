@@ -31,5 +31,13 @@ class PlaylistPipeline:
 
         ctx.user_preferences = self.user_music_prefernces(ctx.user_id)
         ctx.songs = self.chat_func(ctx.user_query, ctx.user_preferences)
+        print(ctx.songs)
+        # {'songs':
+        #     [
+        #         'Perfect', 'Stitches', 'One Call Away', 'Kho Jaane De', 'Thinking Out Loud', 'A Thousand Years', 'Stay with Me', 'Love Someone', 'Eastside', "I'm Yours"
+        #     ]
+        # }
+
+        # songs = response["songs"]
 
         return ctx
